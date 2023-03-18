@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "169841483553",
+    "project_id": "high-five-f2b6a",
+    "storage_bucket": "high-five-f2b6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:169841483553:android:c66c3ce788b6078dc4e860",
+        "android_client_info": {
+          "package_name": "com.example.chat_services"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "169841483553-i778r3etbk0993aknokdl2a4v278a76a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOopZ8-Rl7OFjPZK4hEb1D8LFGXwxdt-I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "169841483553-i778r3etbk0993aknokdl2a4v278a76a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
