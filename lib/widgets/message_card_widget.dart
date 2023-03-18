@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chat_services/resources/styles.dart';
 import 'package:chat_services/view/chat_screen/controller/caht_screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -38,18 +39,35 @@ class MessageCard extends ConsumerWidget {
         SizedBox(width: w * .02),
         Flexible(
           child: Container(
-            padding: EdgeInsets.all(w * .04),
-            decoration: BoxDecoration(
-              color: AppStyles.greenColor,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            margin:
-                EdgeInsets.symmetric(horizontal: w * .05, vertical: h * .05),
-            child: Text(
-              message.msg.toString(),
-              style: AppStyles.textStyleBoldWhite18,
-            ),
-          ),
+              padding: EdgeInsets.all(
+                  message.type == Type.image ? w * .03 : w * .04),
+              decoration: BoxDecoration(
+                color: AppStyles.greenColor,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              margin:
+                  EdgeInsets.symmetric(horizontal: w * .05, vertical: h * .05),
+              child: message.type == Type.text
+                  ? Text(
+                      message.msg.toString(),
+                      style: AppStyles.textStyleBoldWhite18,
+                    )
+                  : 
+                  // Image.network('${message.msg}')
+              ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: CachedNetworkImage(
+                    imageUrl: message.msg.toString(),
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.image, size: 70),
+                  ),
+                ),
+
+              ),
         ),
       ],
     );

@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:chat_services/models/chat_model.dart';
 import 'package:chat_services/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final FirebaseFirestore firestore = FirebaseFirestore.instance;
+final FirebaseStorage storage = FirebaseStorage.instance;
 
 User get userProvider => auth.currentUser!;
 
@@ -53,14 +57,15 @@ class Apis {
         .snapshots();
   }
 
-  static Future<void> sendMessage(ChatUser chatUser, String msg) async {
+  static Future<void> sendMessage(
+      ChatUser chatUser, String msg, Type type) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
     final Message message = Message(
       toId: chatUser.id,
       fromId: userProvider.uid,
       msg: msg,
       read: '',
-      type: Type.text,
+      type: type,
       sent: time,
     );
     final ref =
@@ -74,5 +79,19 @@ class Apis {
             'chats/${getChatRoomId(message.fromId.toString())}/messages/')
         .doc(message.sent)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  }
+
+  static Future<void> sendChatImage(ChatUser chatUser, File file) async {
+    final ext = file.path.split('.').last;
+
+    final ref = storage.ref().child(
+        'images/${getChatRoomId(chatUser.id)}/${DateTime.now().millisecondsSinceEpoch}.$ext');
+    await ref
+        .putFile(file, SettableMetadata(contentType: 'image/$ext'))
+        .then((p0) {
+      print('byte Transfared: ${p0.bytesTransferred}');
+    });
+    final imageUrl = await ref.getDownloadURL();
+    await sendMessage(chatUser, imageUrl, Type.image);
   }
 }
